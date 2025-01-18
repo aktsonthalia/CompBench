@@ -5,6 +5,8 @@ import argparse
 import json
 import shutil
 
+from tqdm import tqdm
+
 from fashionpedia.fp import Fashionpedia
 
 ############################## Configuration #####################################
@@ -63,7 +65,8 @@ def group_by_adj_obj(anno_f_pth, comp_adjs, config, imgId2name):
     #                'curved (fit)': [13077], ...
     #   }, ...
     # }
-    for cat_name, cat_id in zip(cat_names,cat_ids):
+    print(f"Length of cat_ids: {len(cat_ids)}")
+    for cat_name, cat_id in tqdm(zip(cat_names,cat_ids)):
         if cat_name in cat2simpleCat:
             cat_name = cat2simpleCat[cat_name]
         
@@ -90,7 +93,8 @@ def group_by_adj_obj(anno_f_pth, comp_adjs, config, imgId2name):
     # Generate folder pairs
     cnt_pairs = 0
     cnt_cat = 0
-    for cat_name in cat_compAdj_imgs:
+    print("cat_compAdj_imgs: ", len(cat_compAdj_imgs))
+    for cat_name in tqdm(cat_compAdj_imgs):
         comp_adjs_per_cat = list(cat_compAdj_imgs[cat_name].keys())
         #print("comp_adjs_per_cat: ", comp_adjs_per_cat)
 
@@ -176,7 +180,7 @@ def main():
     ann = json.load(open(anno_f_pth))
     
     imgId2name = {}
-    for _, ele in enumerate(ann["images"]):
+    for ele in tqdm(ann["images"]):
         img_id = ele["id"]
         img_name = ele["file_name"].split(".jpg")[0]
         imgId2name[img_id] = img_name
