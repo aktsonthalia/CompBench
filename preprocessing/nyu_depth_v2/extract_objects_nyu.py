@@ -6,6 +6,7 @@ import copy
 import shutil
 import sys
 import mat73
+from tqdm import tqdm
 import numpy as np
 
 
@@ -44,7 +45,8 @@ def group_by_object(config):
     anns = np.transpose(anns, (2,0,1))
     
     obj2img = defaultdict(list)
-    for img_id, ann in enumerate(anns):
+    print(f"Number of images: {len(anns)}")
+    for img_id, ann in tqdm(enumerate(anns)):
         img_id = str(img_id)
         if img_id in img_ids_split:
             lbls = np.unique(ann)
